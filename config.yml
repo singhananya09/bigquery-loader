@@ -1,0 +1,21 @@
+# Configuration used by importer.
+# While you can update values,
+# avoid updating key names.
+jira:
+  host: https://onplan.atlassian.net/rest/api/latest/search
+  jql_filter: ((createddate >= startofday(-180d) AND Sprint not in futureSprints()) OR Sprint in openSprints()) AND "Story Points[Number]" != EMPTY
+  sprint_id: customfield_10020
+intercom:
+  host: https://api.intercom.io
+  companies_endpoint: /companies
+  tag_id: tags
+  contacts_endpoint: /contacts
+  per_page: 50
+big_query:
+  credentials: dw_credentials.json
+  project_id: data-warehouse-304212
+  jira_table_id: data-warehouse-304212.jira.issue
+  intercom_company_table_id: data-warehouse-304212.intercom.company
+  intercom_contact_table_id: data-warehouse-304212.intercom.contact
+  intercom_xref_table_id: data-warehouse-304212.intercom.xref_contact_company
+  write_deposition: WRITE_TRUNCATE
