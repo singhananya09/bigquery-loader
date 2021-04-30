@@ -16,29 +16,52 @@ class IntercomLoader:
         headers["Accept"] = "application/json"
         headers["Authorization"] = f"Bearer {utils.get_intercom_token()}"
 
+        self.contact_id = None
+        self.starting_after = None
         self.total_pages_for_companies = None
-        self.total_pages_for_contacts = None
         self.intercom_config = utils.get_intercom_config()
         self.request_headers = headers
         self.host = self.intercom_config['host']
 
-    def __get_response_for_endpoint(self, endpoint, page):
-        request_url = f"{self.host}{endpoint}?per_page={self.intercom_config['per_page']}&page={page}"
+    def __get_response_for_endpoint(self, endpoint, page, starting_after, contact_id):
+        request_url = f"{self.host}{endpoint}?per_page={self.intercom_config['per_page']}"
+        if page != None:
+            request_url = f"{request_url}&page={page}"
+        if starting_after != None:
+            request_url = f"{request_url}&starting_after={starting_after}"
+        if contact_id != None:
+            request_url = f"{request_url}&contact_id={contact_id}/companies"
+            
         response = rq.get(request_url, headers=self.request_headers)
 
         return DotMap(json.loads(response.text))
 
+    def has_more_contacts(self):
+        if self.starting_after == None:
+            return False
+        else:
+            return True
+
     def get_companies(self, page):
         response_body = self.__get_response_for_endpoint(
-            self.intercom_config['companies_endpoint'], page)
+            self.intercom_config['companies_endpoint'], page, None, None)
         self.total_pages_for_companies = response_body.pages.total_pages
 
         return response_body.data
 
-    def get_contacts(self, page):
+    def get_contacts(self):
         response_body = self.__get_response_for_endpoint(
-            self.intercom_config['contacts_endpoint'], page)
-        self.total_pages_for_contacts = response_body.pages.total_pages
+            self.intercom_config['contacts_endpoint'], None, self.starting_after, None)
+        self.starting_after = None
+
+        if 'next' in response_body.pages:
+            self.starting_after = response_body.pages['next']['starting_after']
+
+        return response_body.data
+
+    def get_contact_companies(self, contact_id):
+        response_body = self.__get_response_for_endpoint(
+            self.intercom_config['contacts_endpoint'], None, None, contact_id)
 
         return response_body.data
 
@@ -47,6 +70,7 @@ class IntercomData:
     def __init__(self):
         self.companies = []
         self.contacts = []
+        self.contact_companies = []
 
     def add_company(self, raw_company, raw_tag):
         parsed_company = {
@@ -78,3 +102,13 @@ class IntercomData:
 
     def get_contacts(self):
         return self.contacts
+
+    def add_contact_companies(self, raw_contact, raw_contact_company):
+        parsed_contact_companies = {
+            'contact_id': raw_contact.id,
+            'company_id': raw_contact_company.company_id
+        }
+        self.contact_companies.append(parsed_contact_companies)
+
+    def get_contact_companies(self):
+        return self.contact_companies

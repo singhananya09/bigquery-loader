@@ -66,6 +66,68 @@ def get_intercom_companies_dataframe(intercom_config):
     return pd.DataFrame(intercom_data.get_companies())
 
 
+def get_intercom_contacts_dataframe(intercom_config):
+
+    intercom_loader = IntercomLoader()
+    intercom_data = IntercomData()
+
+    # Start paginated parsing and loading
+    while True:
+        
+        raw_contacts = intercom_loader.get_contacts()
+        # Iterate over each company item
+        for raw_contact in raw_contacts:
+            
+            intercom_data.add_contact(raw_contact)
+
+        # Check if there are more pages
+        if intercom_loader.has_more_contacts() != True:
+            break
+
+    return pd.DataFrame(intercom_data.get_contacts())
+
+
+def get_intercom_contact_companies_dataframe(intercom_config):
+
+    intercom_loader = IntercomLoader()
+    intercom_data = IntercomData()
+
+
+    # Start paginated parsing and loading
+    while True:
+        
+        raw_contacts = intercom_loader.get_contacts()
+
+        # Iterate over each contact item
+        for raw_contact in raw_contacts:
+            
+            intercom_data.add_contact(raw_contact)
+
+            # Iterate over each company within a contact
+            company_count = raw_contact.companies.total_count
+            if company_count != 0:
+                
+                if company_count <= 10:
+                    
+
+                    for raw_contact_company in raw_contact.companies.get('data'):
+                        # Add company to intercom_data collection
+                        intercom_data.add_contact_companies(raw_contact, raw_contact_company)
+                        
+                if company_count > 10:
+                    raw_contact_companies = intercom_loader.get_contact_companies(raw_contact.id)
+                    
+                    for raw_contact_company in raw_contact_companies:
+                        # Add contact_id and company_id to intercom_data collection
+                        intercom_data.add_contact_companies(raw_contact, raw_contact_company)
+        
+        if intercom_loader.has_more_contacts() != True:
+            break
+
+
+    print(pd.DataFrame(intercom_data.get_contact_companies()))
+
+
 def load_jira_dataframe(bq_config, dataframe):
     bq_helper = BigQueryHelper(bq_config['jira_table_id'], bigquery.LoadJobConfig(
         write_disposition=bq_config['write_deposition']))
@@ -104,6 +166,7 @@ def main():
     utils = HelperUtils()
     bq_config = utils.get_bigquery_config()
 
+    '''
     # Load Jira dataframe into BigQuery
     jira_dataframe = get_jira_dataframe(utils.get_jira_config())
     load_jira_dataframe(bq_config, jira_dataframe)
@@ -112,7 +175,17 @@ def main():
     intercom_companies_dataframe = get_intercom_companies_dataframe(
         utils.get_intercom_config())
     load_intercom_companies_dataframe(bq_config, intercom_companies_dataframe)
+    
+    # Load Intercom contacts dataframe into BigQuery
+    intercom_contacts_dataframe = get_intercom_contacts_dataframe(
+    utils.get_intercom_config())
+    print(intercom_contacts_dataframe)
 
+    '''
+    # Load Intercom contacts dataframe into BigQuery
+    intercom_contact_companies_dataframe = get_intercom_contact_companies_dataframe(
+    utils.get_intercom_config())
+    print(intercom_contact_companies_dataframe)
 
 # Call Main Function
 if __name__ == "__main__":
