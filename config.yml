@@ -1,21 +1,65 @@
 # Configuration used by importer.
 # While you can update values,
 # avoid updating key names.
+
+# Jira Instance Configuration
 jira:
+  # Jira Search API endpoint
   host: https://onplan.atlassian.net/rest/api/latest/search
+
+  # JQL (Jira Query Language) filter to use while performing the search
   jql_filter: ((createddate >= startofday(-180d) AND Sprint not in futureSprints()) OR Sprint in openSprints()) AND "Story Points[Number]" != EMPTY
+
+  # Custom identifier for Spring ID field
   sprint_id: customfield_10020
+
+# Intercom Instance Configuration
 intercom:
+
+  # Intercom API endpoint
   host: https://api.intercom.io
+
+  # Companies sub-path endpoint
   companies_endpoint: /companies
+
+  # Property pointing to tags
   tag_id: tags
+
+  # Contacts sub-path endpoint
   contacts_endpoint: /contacts
-  per_page: 100
+
+  # Objects to fetch per-request
+  per_page: 50
+
+# Google BigQuery Configuration
 big_query:
+
+  # BigQuery API credentials private key file
   credentials: dw_credentials.json
+
+  # BigQuery Project ID
   project_id: data-warehouse-304212
+
+  # Jira Table ID within BigQuery project
   jira_table_id: data-warehouse-304212.jira.issue
+
+  # Intercom Company table ID within BigQuery Project
   intercom_company_table_id: data-warehouse-304212.intercom.company
+
+  # Intercom Contact table ID within BigQuery Project
   intercom_contact_table_id: data-warehouse-304212.intercom.contact
+
+  # Intercom Xref table ID within BigQuery Project
   intercom_xref_table_id: data-warehouse-304212.intercom.xref_contact_company
-  write_deposition: WRITE_TRUNCATE
+
+  # Write Deposition to use for Jira table
+  jira_write_deposition: WRITE_TRUNCATE
+
+  # Write Deposition to use for Intercom Company table
+  intercom_company_write_deposition: WRITE_APPEND
+
+  # Write Deposition to use for Intercom Contact table
+  intercom_contact_write_deposition: WRITE_APPEND
+
+  # Write Deposition to use for Intercom Xref table
+  intercom_xref_write_deposition: WRITE_TRUNCATE

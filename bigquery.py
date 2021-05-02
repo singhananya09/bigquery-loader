@@ -3,7 +3,6 @@ from google.oauth2 import service_account
 
 from helperutils import HelperUtils
 
-
 class BigQueryHelper:
     def __init__(self, table_id, job_config):
         utils = HelperUtils()

@@ -8,7 +8,6 @@ from dotmap import DotMap
 from helperutils import HelperUtils
 from bigquery import BigQueryHelper
 
-
 class IntercomLoader:
     def __init__(self):
         utils = HelperUtils()
@@ -30,8 +29,9 @@ class IntercomLoader:
         if starting_after != None:
             request_url = f"{request_url}&starting_after={starting_after}"
         if contact_id != None:
-            request_url = f"{request_url}&contact_id={contact_id}/companies"
-            
+            request_url = f"{self.host}{endpoint}/{contact_id}/companies"
+
+        print(f"GET {request_url}")
         response = rq.get(request_url, headers=self.request_headers)
 
         return DotMap(json.loads(response.text))
@@ -64,7 +64,6 @@ class IntercomLoader:
             self.intercom_config['contacts_endpoint'], None, None, contact_id)
 
         return response_body.data
-
 
 class IntercomData:
     def __init__(self):
@@ -106,7 +105,7 @@ class IntercomData:
     def add_contact_companies(self, raw_contact, raw_contact_company):
         parsed_contact_companies = {
             'contact_id': raw_contact.id,
-            'company_id': raw_contact_company.company_id
+            'company_id': raw_contact_company.id
         }
         self.contact_companies.append(parsed_contact_companies)
 

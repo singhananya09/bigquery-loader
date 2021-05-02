@@ -140,4 +140,4 @@ cython_debug/
 
 # Custom Ignores
 dw_credentials.json
-run.bat
+*.json
