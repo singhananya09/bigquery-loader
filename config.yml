@@ -31,6 +31,27 @@ intercom:
   # Objects to fetch per-request
   per_page: 50
 
+# Hubspot Instance Configuration
+hubspot:
+
+  # Hubspot API endpoint
+  host: https://api.hubapi.com
+
+  # Company-Deals sub-path endpoint
+  contact_deals_endpoint: /deals/v1/deal/associated/company
+
+  # Association property
+  association: true
+
+  # Objects to fetch per-request
+  limit: 100
+
+  # Query to get Company_ID
+  query_string: select company_id from `hubspot.company`
+
+  # Get data based on properties
+  properties: dealname
+
 # Google BigQuery Configuration
 big_query:
 
@@ -52,6 +73,9 @@ big_query:
   # Intercom Xref table ID within BigQuery Project
   intercom_xref_table_id: data-warehouse-304212.intercom.xref_contact_company
 
+  # Hubspot Company Deals table ID within BigQuery Project
+  hubspot_company_deals_table_id: data-warehouse-304212.hubspot.company_deals
+
   # Write Deposition to use for Jira table
   jira_write_deposition: WRITE_TRUNCATE
 
@@ -63,3 +87,6 @@ big_query:
 
   # Write Deposition to use for Intercom Xref table
   intercom_xref_write_deposition: WRITE_TRUNCATE
+
+  # Write Deposition to use for Hubspot Company Deals table
+  hubspot_company_deals_write_deposition: WRITE_TRUNCATE

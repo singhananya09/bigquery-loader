@@ -102,12 +102,12 @@ class IntercomData:
     def get_contacts(self):
         return self.contacts
 
-    def add_contact_companies(self, raw_contact, raw_contact_company):
-        parsed_contact_companies = {
+    def add_contact_company(self, raw_contact, raw_contact_company):
+        parsed_contact_company = {
             'contact_id': raw_contact.id,
             'company_id': raw_contact_company.id
         }
-        self.contact_companies.append(parsed_contact_companies)
+        self.contact_companies.append(parsed_contact_company)
 
     def get_contact_companies(self):
         return self.contact_companies

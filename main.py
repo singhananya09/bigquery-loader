@@ -11,6 +11,7 @@ from helperutils import HelperUtils
 from jira import JiraLoader, JiraData
 from intercom import IntercomLoader, IntercomData
 from bigquery import BigQueryHelper
+from hubspot import HubspotLoader, HubspotData
 
 
 def get_jira_dataframe(jira_config):
@@ -108,17 +109,45 @@ def get_intercom_contact_companies_dataframe(intercom_config):
                 if company_count <= 10:
                     for raw_contact_company in raw_contact.companies.get('data'):
                         # Add company to intercom_data collection
-                        intercom_data.add_contact_companies(raw_contact, raw_contact_company)
+                        intercom_data.add_contact_company(
+                            raw_contact, raw_contact_company)
                 else:
-                    raw_contact_companies = intercom_loader.get_contact_companies(raw_contact.id)
+
+                    raw_contact_companies = intercom_loader.get_contact_companies(
+                        raw_contact.id)
                     for raw_contact_company in raw_contact_companies:
                         # Add contact_id and company_id to intercom_data collection
-                        intercom_data.add_contact_companies(raw_contact, raw_contact_company)
+                        intercom_data.add_contact_company(
+                            raw_contact, raw_contact_company)
 
         if intercom_loader.has_more_contacts() != True:
             break
 
     return pd.DataFrame(intercom_data.get_contact_companies())
+
+
+def get_hubspot_company_deals_dataframe(hubspot_config):
+
+    bq_helper = BigQueryHelper()
+    hubspot_loader = HubspotLoader()
+    hubspot_data = HubspotData()
+
+    query_string = hubspot_config['query_string']
+    properties = hubspot_config['properties']
+
+    dataframe = bq_helper.get_dataframe_from_query(query_string)
+
+    company_list = list(dataframe['company_id'])
+    #company_list = [5396871923]
+
+    for company_id in company_list:
+        raw_company_deals = hubspot_loader.get_company_deals(
+            company_id, properties)
+
+        for raw_company_deal in raw_company_deals:
+            hubspot_data.add_company_deal(company_id, raw_company_deal)
+
+    return pd.DataFrame(hubspot_data.get_company_deals())
 
 
 def load_jira_dataframe(bq_config, dataframe):
@@ -208,6 +237,20 @@ def load_intercom_contact_companies_dataframe(bq_config, dataframe):
     bq_helper.close_client()
 
 
+def load_hubspot_company_deals_dataframe(bq_config, dataframe):
+    bq_helper = BigQueryHelper(
+        bq_config['hubspot_company_deals_table_id'], bigquery.LoadJobConfig(
+
+            write_disposition=bq_config['hubspot_company_deals_write_deposition']))
+
+    bq_helper.load_table(dataframe)
+    table = bq_helper.get_table()
+    print(
+        f"Hubspot Company_Deals => Loaded {table.num_rows} rows with {len(table.schema)} columns to {bq_helper.table_id}"
+    )
+    bq_helper.close_client()
+
+
 def main():
     utils = HelperUtils()
     bq_config = utils.get_bigquery_config()
@@ -234,10 +277,21 @@ def main():
     # Load Intercom contact companies dataframe into BigQuery
     intercom_contact_companies_dataframe = get_intercom_contact_companies_dataframe(
         utils.get_intercom_config())
-    load_intercom_contact_companies_dataframe(bq_config, intercom_contact_companies_dataframe)
+    load_intercom_contact_companies_dataframe(
+        bq_config, intercom_contact_companies_dataframe)
     print("Intercom import and load completed")
 
+    # Load Hubspot company deals dataframe into BigQuery
+    print("Hubspot import and load started")
+    hubspot_company_deals_dataframe = get_hubspot_company_deals_dataframe(
+        utils.get_hubspot_config())
+
+    load_hubspot_company_deals_dataframe(
+        bq_config, hubspot_company_deals_dataframe)
+    print("Hubspot import and load completed")
+
     print(f"Completed in {math.ceil(time.time() - start_time)} seconds")
+
 
 # Call Main Function
 if __name__ == "__main__":
