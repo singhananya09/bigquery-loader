@@ -52,6 +52,9 @@ hubspot:
   # Get data based on properties
   properties: dealname
 
+  # No. of requests to make per second as per Hubspot API limits
+  requests_per_second: 15
+
 # Google BigQuery Configuration
 big_query:
 

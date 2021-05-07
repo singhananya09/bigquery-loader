@@ -2,6 +2,7 @@ import os
 
 import yaml as yml
 
+
 class HelperUtils:
     def __init__(self):
         self.config_file = "config.yml"
@@ -33,3 +34,15 @@ class HelperUtils:
 
     def get_hubspot_token(self):
         return os.environ['HUBSPOT_TOKEN']
+
+    def get_list_of_batches(self, source_list, batch_size):
+        batches = []
+        batch = []
+        source_list_len = len(source_list)
+        for i in range(source_list_len):
+            batch.append(source_list[i])
+            if (len(batch) == batch_size or i == source_list_len - 1):
+                batches.append(batch)
+                batch = []
+
+        return batches
