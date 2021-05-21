@@ -6,7 +6,7 @@ from google.cloud import bigquery
 
 from intercom.intercom_loader import IntercomLoader
 from intercom.intercom_data import IntercomData
-from helperutils import HelperUtils
+from utils.helperutils import HelperUtils
 from bigquery import BigQueryHelper
 
 

@@ -6,8 +6,8 @@ from hubspot_dataframe import hubspot_init
 
 
 def main():
-    # jira_init()
-    # intercom_init()
+    jira_init()
+    intercom_init()
     hubspot_init()
 
 

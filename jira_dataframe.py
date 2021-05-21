@@ -6,7 +6,7 @@ from google.cloud import bigquery
 
 from jira.jira_loader import JiraLoader
 from jira.jira_data import JiraData
-from helperutils import HelperUtils
+from utils.helperutils import HelperUtils
 from bigquery import BigQueryHelper
 
 

@@ -6,7 +6,7 @@ import asyncio
 import requests as rq
 from dotmap import DotMap
 
-from helperutils import HelperUtils
+from utils.helperutils import HelperUtils
 from utils.networkutils import NetworkUtils
 
 
