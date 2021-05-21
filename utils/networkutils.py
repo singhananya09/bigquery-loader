@@ -11,7 +11,7 @@ from dotmap import DotMap
 import backoff
 
 import yaml as yml
-from helperutils import HelperUtils
+from utils.helperutils import HelperUtils
 
 
 class NetworkUtils:
