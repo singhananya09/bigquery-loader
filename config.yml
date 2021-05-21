@@ -94,6 +94,7 @@ big_query:
   # Write Deposition to use for Hubspot Company Deals table
   hubspot_company_deals_write_deposition: WRITE_TRUNCATE
 
+# Network Configuration
 network:
 
   # No. of maximum tries to hit the API server before backoff
