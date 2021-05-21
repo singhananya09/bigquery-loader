@@ -83,13 +83,18 @@ big_query:
   jira_write_deposition: WRITE_TRUNCATE
 
   # Write Deposition to use for Intercom Company table
-  intercom_company_write_deposition: WRITE_APPEND
+  intercom_company_write_deposition: WRITE_TRUNCATE
 
   # Write Deposition to use for Intercom Contact table
-  intercom_contact_write_deposition: WRITE_APPEND
+  intercom_contact_write_deposition: WRITE_TRUNCATE
 
   # Write Deposition to use for Intercom Xref table
   intercom_xref_write_deposition: WRITE_TRUNCATE
 
   # Write Deposition to use for Hubspot Company Deals table
   hubspot_company_deals_write_deposition: WRITE_TRUNCATE
+
+network:
+
+  # No. of maximum tries to hit the API server before backoff
+  max_tries: 5
