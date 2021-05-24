@@ -39,6 +39,9 @@ class HelperUtils:
     def get_hubspot_token(self):
         return os.environ['HUBSPOT_TOKEN']
 
+    def get_bigquery_key(self):
+        return os.environ['BIGQUERY_KEY']
+
     def get_list_of_batches(self, source_list, batch_size):
         batches = []
         batch = []

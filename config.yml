@@ -57,10 +57,6 @@ hubspot:
 
 # Google BigQuery Configuration
 big_query:
-
-  # BigQuery API credentials private key file
-  credentials: dw_credentials.json
-
   # BigQuery Project ID
   project_id: data-warehouse-304212
 

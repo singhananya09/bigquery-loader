@@ -1,3 +1,5 @@
+import json
+
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from google.cloud import bigquery_storage
@@ -9,10 +11,11 @@ class BigQueryHelper:
     def __init__(self, table_id=None, job_config=None):
         utils = HelperUtils()
         bigquery_config = utils.get_bigquery_config()
+        bigquery_credentials = json.loads(utils.get_bigquery_key())
 
         self.has_table_loaded = False
-        self.credentials = service_account.Credentials.from_service_account_file(
-            rf"{bigquery_config['credentials']}")
+        self.credentials = service_account.Credentials.from_service_account_info(
+            bigquery_credentials)
         self.client = bigquery.Client(
             credentials=self.credentials, project=bigquery_config['project_id'])
         self.storage_client = bigquery_storage.BigQueryReadClient(
