@@ -55,3 +55,4 @@ typing-inspect==0.6.0
 uritemplate==3.0.1
 urllib3==1.26.4
 yarl==1.6.3
+backoff==1.10.0

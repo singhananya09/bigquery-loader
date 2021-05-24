@@ -4,7 +4,7 @@ import requests as rq
 from requests.structures import CaseInsensitiveDict
 from dotmap import DotMap
 
-from helperutils import HelperUtils
+from utils.helperutils import HelperUtils
 
 
 class IntercomLoader:

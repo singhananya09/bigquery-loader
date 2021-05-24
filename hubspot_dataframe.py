@@ -8,7 +8,7 @@ from google.cloud import bigquery
 
 from hubspot.hubspot_loader import HubspotLoader
 from hubspot.hubspot_data import HubspotData
-from helperutils import HelperUtils
+from utils.helperutils import HelperUtils
 from bigquery import BigQueryHelper
 
 

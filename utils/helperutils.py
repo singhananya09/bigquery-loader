@@ -23,6 +23,10 @@ class HelperUtils:
         with open(self.config_file, "r") as f:
             return yml.safe_load(f)['big_query']
 
+    def get_network_config(self):
+        with open(self.config_file, "r") as f:
+            return yml.safe_load(f)['network']
+
     def get_jira_auth_username(self):
         return os.environ['JIRA_USERNAME']
 
