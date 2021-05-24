@@ -21,14 +21,13 @@ the script, those are as follows;
    - `JIRA_TOKEN`: Authentication token associated with Jira account.
    - `INTERCOM_TOKEN`: Authentication token associated with Intercom account.
    - `HUBSPOT_TOKEN`: Authentication token associated with Hubspot account.
+   - `BIGQUERY_KEY`: Authentication key associated with BigQuery account.
 2. Once data is fetched from Jira, Intercom and Hubspot via its respective REST API,
    it is then loaded into Google BigQuery as dataframe object. The BigQuery
-   API requires a private key file (`.json`) to be provided before data can be loaded.
-   You need to obtain this file from your organization's Google Cloud Platform
-   administrator. Once the file is available, place it in the root folder of this
-   project and rename it to `dw_credentials.json` (it can be named as anything but
-   you would have to update the `config.yml`'s `big_query.credentials` property
-   value with the file name).
+   API requires a private key (in `json` string format) to be provided before data can be loaded.
+   You need to obtain this string from your organization's Google Cloud Platform
+   administrator. Once the string is available, create enivornment variable as `BIGQUERY_KEY` (it can be named as anything but
+   you would have to update the `helperutils.py`'s `get_bigquery_key` function).
 3. After environment variables are set and private key file is available, install
    project dependencies by running `pip install -r requirements.txt`. Please note
    that if you're running Python 3 along side Python 2, `pip` command may still
