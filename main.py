@@ -1,8 +1,13 @@
 # Be sure to run `pip install -r requirements.txt`
 # before running this script!
-from jira_dataframe import jira_init
-from intercom_dataframe import intercom_init
+
 from hubspot_dataframe import hubspot_init
+from intercom_dataframe import intercom_init
+from jira_dataframe import jira_init
+import os
+
+# Change working directory
+os.chdir(os.path.dirname(__file__))
 
 
 def main():
