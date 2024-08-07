@@ -31,7 +31,7 @@ the script, those are as follows;
 3. After environment variables are set and private key file is available, install
    project dependencies by running `pip install -r requirements.txt`. Please note
    that if you're running Python 3 along side Python 2, `pip` command may still
-   be pointing to Python too, in which case, you would run `pip3 install -r requirements.txt`.
+   be pointing to Python 2, in which case, you would run `pip3 install -r requirements.txt`.
 
 ##### `config.yml`
 
